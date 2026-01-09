@@ -6,6 +6,12 @@ This package wraps the `web_authen.js` logic and exposes it via a clean, strictl
 
 **Platform support**: Web only (Flutter Web).
 
+## WebAuthn references
+
+- WebAuthn specification (W3C): https://www.w3.org/TR/webauthn-3/
+- Web Authentication API overview (W3C): https://www.w3.org/TR/webauthn-2/
+- WebAuthn.org (FIDO Alliance): https://webauthn.org/
+
 ## Features
 
 - **Register**: Create a new public key credential.

@@ -1,5 +1,5 @@
 name: web_authn_web
-description: "A Flutter Web plugin for WebAuthn authentication handling passkey creation and signing."
+description: "Flutter Web plugin for WebAuthn (passkeys) registration and authentication."
 version: 0.0.1
 homepage: https://github.com/Nagy25/web_authn_web
 repository: https://github.com/Nagy25/web_authn_web
