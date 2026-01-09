@@ -24,10 +24,6 @@ abstract class WebAuthnWebPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
-  }
-
   Future<Map<String, dynamic>> register(PublicKeyCredentialCreationOptions publicKey) {
     throw UnimplementedError('register() has not been implemented.');
   }

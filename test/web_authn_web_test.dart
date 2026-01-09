@@ -8,9 +8,6 @@ class MockWebAuthnWebPlatform
     with MockPlatformInterfaceMixin
     implements WebAuthnWebPlatform {
   @override
-  Future<String?> getPlatformVersion() => Future.value('42');
-
-  @override
   Future<Map<String, dynamic>> register(PublicKeyCredentialCreationOptions publicKey) {
     return Future.value(<String, dynamic>{});
   }
@@ -31,13 +28,5 @@ void main() {
 
   test('$MethodChannelWebAuthnWeb is the default instance', () {
     expect(initialPlatform, isInstanceOf<MethodChannelWebAuthnWeb>());
-  });
-
-  test('getPlatformVersion', () async {
-    WebAuthnWeb webAuthnWebPlugin = WebAuthnWeb();
-    MockWebAuthnWebPlatform fakePlatform = MockWebAuthnWebPlatform();
-    WebAuthnWebPlatform.instance = fakePlatform;
-
-    expect(await webAuthnWebPlugin.getPlatformVersion(), '42');
   });
 }

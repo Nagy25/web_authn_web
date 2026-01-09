@@ -38,13 +38,6 @@ class WebAuthnWebWeb extends WebAuthnWebPlatform {
   }
 
 
-  /// Returns a [String] containing the version of the platform.
-  @override
-  Future<String?> getPlatformVersion() async {
-    final version = web.window.navigator.userAgent;
-    return version;
-  }
-  
   @override
   Future<Map<String, dynamic>> register(PublicKeyCredentialCreationOptions publicKey) async {
     try {
