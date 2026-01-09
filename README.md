@@ -4,6 +4,8 @@ A Flutter Web implementation for WebAuthn (Web Authentication API), allowing you
 
 This package wraps the `web_authen.js` logic and exposes it via a clean, strictly typed Dart API.
 
+**Platform support**: Web only (Flutter Web).
+
 ## Features
 
 - **Register**: Create a new public key credential.
@@ -17,13 +19,30 @@ Add this package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  web_authn_web:
-    path: path/to/web_authn_web
+  web_authn_web: ^0.0.1
+```
+
+Or run:
+
+```bash
+flutter pub add web_authn_web
 ```
 
 ## Usage
 
 This package automatically injects the required JavaScript code (`web_authen.js`) into your application.
+
+### Requirements
+
+- **Secure context**: WebAuthn requires HTTPS (or `localhost`).
+- **Relying Party ID**: `rp.id` (and `rpId` in login) must match your effective domain (e.g., `example.com`).
+- **Server side**: You must generate challenges and verify the returned attestation/assertion on your backend.
+
+### Data encoding expectations
+
+- `challenge`: base64url encoded string.
+- `user.id`: base64 encoded string (standard base64, not url-safe).
+- `allowCredentials[].id` and `excludeCredentials[].id`: base64url encoded string.
 
 ### Register a Passkey
 
@@ -39,7 +58,7 @@ final options = PublicKeyCredentialCreationOptions(
     id: 'CAMW', // base64 encoded id
     displayName: 'User Name',
   ),
-  challenge: 'Y2hhbGxlbmdl', // base64 encoded challenge
+  challenge: 'Y2hhbGxlbmdl', // base64url encoded challenge
   pubKeyCredParams: [
     PubKeyCredParam(type: 'public-key', alg: -7), // ES256
   ],
@@ -60,7 +79,7 @@ try {
 
 ```dart
 final options = PublicKeyCredentialRequestOptions(
-  challenge: 'Y2hhbGxlbmdl', // base64 encoded challenge
+  challenge: 'Y2hhbGxlbmdl', // base64url encoded challenge
   rpId: 'example.com',
   userVerification: 'required',
 );
@@ -82,3 +101,8 @@ try {
   print('Delete failed: $e');
 }
 ```
+
+## Notes
+
+- This package only performs the browser-side WebAuthn calls. Always validate the returned data on your server.
+- Passkey APIs are not available in all browsers or in insecure contexts.
