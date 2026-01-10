@@ -6,6 +6,7 @@ import 'dart:js_interop';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:web/web.dart' as web;
 
+import 'src/exceptions.dart';
 import 'src/models.dart';
 import 'web_authn_web_platform_interface.dart';
 
@@ -46,7 +47,11 @@ class WebAuthnWebWeb extends WebAuthnWebPlatform {
       return (result.dartify() as Map<Object?, Object?>).cast<String, dynamic>();
 
     } catch (e) {
-      throw Exception('Registration failed: $e');
+      throw WebAuthnWebException(
+        'register',
+        'Registration failed. Check HTTPS/localhost, rpId domain match, and browser WebAuthn support.',
+        e,
+      );
     }
   }
 
@@ -57,7 +62,11 @@ class WebAuthnWebWeb extends WebAuthnWebPlatform {
       final result = await _sign(jsOptions).toDart;
       return (result.dartify() as Map<Object?, Object?>).cast<String, dynamic>();
     } catch (e) {
-      throw Exception('Sign failed: $e');
+      throw WebAuthnWebException(
+        'sign',
+        'Authentication failed. Check HTTPS/localhost, rpId domain match, and user verification requirements.',
+        e,
+      );
     }
   }
 
@@ -67,7 +76,11 @@ class WebAuthnWebWeb extends WebAuthnWebPlatform {
        final jsOptions = {'id': credentialId, 'rpId': rpId}.jsify();
        await _deleteAuth(jsOptions).toDart;
     } catch (e) {
-       throw Exception('DeleteAuth failed: $e');
+       throw WebAuthnWebException(
+         'deleteAuth',
+         'Credential deletion failed. Check rpId domain match and that the credential exists.',
+         e,
+       );
     }
   }
 }

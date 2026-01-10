@@ -1,5 +1,6 @@
 
 import 'src/models.dart';
+export 'src/exceptions.dart';
 export 'src/models.dart';
 
 import 'web_authn_web_platform_interface.dart';

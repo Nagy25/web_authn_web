@@ -76,8 +76,11 @@ final options = PublicKeyCredentialCreationOptions(
 try {
   final result = await webAuthn.register(options);
   print('Registration successful: $result');
+} on WebAuthnWebException catch (e) {
+  print('Registration failed: ${e.message}');
+  print('Cause: ${e.cause}');
 } catch (e) {
-  print('Registration failed: $e');
+  print('Registration failed with unexpected error: $e');
 }
 ```
 
@@ -93,8 +96,11 @@ final options = PublicKeyCredentialRequestOptions(
 try {
   final result = await webAuthn.sign(options);
   print('Sign successful: $result');
+} on WebAuthnWebException catch (e) {
+  print('Sign failed: ${e.message}');
+  print('Cause: ${e.cause}');
 } catch (e) {
-  print('Sign failed: $e');
+  print('Sign failed with unexpected error: $e');
 }
 ```
 
@@ -103,10 +109,20 @@ try {
 ```dart
 try {
   await webAuthn.deleteAuth('credentialId', 'rpId');
+} on WebAuthnWebException catch (e) {
+  print('Delete failed: ${e.message}');
+  print('Cause: ${e.cause}');
 } catch (e) {
-  print('Delete failed: $e');
+  print('Delete failed with unexpected error: $e');
 }
 ```
+
+### Error handling tips
+
+- Ensure your app runs in a secure context (HTTPS or `localhost`).
+- Make sure `rp.id` / `rpId` matches the effective domain.
+- Confirm your browser supports WebAuthn and the required user verification.
+- Double-check base64/base64url encoding for `challenge`, `user.id`, and credential IDs.
 
 ## Notes
 
