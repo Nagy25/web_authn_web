@@ -1,5 +1,7 @@
 # web_authn_web
 
+[![Buy Me A Coffee](https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png)](https://www.buymeacoffee.com/ahmednagy)
+
 A Flutter Web implementation for WebAuthn (Web Authentication API), allowing you to register and authenticate users using passkeys/biometrics.
 
 This package wraps the `web_authen.js` logic and exposes it via a clean, strictly typed Dart API.
