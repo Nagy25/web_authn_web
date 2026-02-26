@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Add missing exception file
+
 ## 0.0.3
 
 * Add WebAuthnWebException with clearer error messages.
