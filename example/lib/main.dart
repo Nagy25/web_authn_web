@@ -14,6 +14,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _webAuthnWebPlugin = WebAuthnWeb();
+  // JS bridge script is loaded lazily on the first register/sign/delete call.
   String _registerRpName = 'ACME Corp';
   String _registerRpId = 'localhost';
   String _registerUserName = 'user@example.com';
@@ -72,18 +73,22 @@ class _MyAppState extends State<MyApp> {
     final rpIdController = TextEditingController(text: _registerRpId);
     final userNameController = TextEditingController(text: _registerUserName);
     final userIdController = TextEditingController(text: _registerUserId);
-    final displayNameController =
-        TextEditingController(text: _registerDisplayName);
-    final challengeController =
-        TextEditingController(text: _registerChallenge);
-    final attachmentController =
-        TextEditingController(text: _registerAuthenticatorAttachment);
-    final residentKeyController =
-        TextEditingController(text: _registerResidentKey);
-    final attestationController =
-        TextEditingController(text: _registerAttestation);
-    final timeoutController =
-        TextEditingController(text: _registerTimeoutMs.toString());
+    final displayNameController = TextEditingController(
+      text: _registerDisplayName,
+    );
+    final challengeController = TextEditingController(text: _registerChallenge);
+    final attachmentController = TextEditingController(
+      text: _registerAuthenticatorAttachment,
+    );
+    final residentKeyController = TextEditingController(
+      text: _registerResidentKey,
+    );
+    final attestationController = TextEditingController(
+      text: _registerAttestation,
+    );
+    final timeoutController = TextEditingController(
+      text: _registerTimeoutMs.toString(),
+    );
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -165,8 +170,10 @@ class _MyAppState extends State<MyApp> {
       _registerAuthenticatorAttachment = attachmentController.text.trim();
       _registerResidentKey = residentKeyController.text.trim();
       _registerAttestation = attestationController.text.trim();
-      _registerTimeoutMs =
-          _parseInt(timeoutController.text, _registerTimeoutMs);
+      _registerTimeoutMs = _parseInt(
+        timeoutController.text,
+        _registerTimeoutMs,
+      );
     });
 
     try {
@@ -184,12 +191,12 @@ class _MyAppState extends State<MyApp> {
           PubKeyCredParam(type: 'public-key', alg: -257), // RS256
         ],
         authenticatorSelection: AuthenticatorSelectionCriteria(
-          authenticatorAttachment:
-              _registerAuthenticatorAttachment.isEmpty
-                  ? null
-                  : _registerAuthenticatorAttachment,
-          residentKey:
-              _registerResidentKey.isEmpty ? null : _registerResidentKey,
+          authenticatorAttachment: _registerAuthenticatorAttachment.isEmpty
+              ? null
+              : _registerAuthenticatorAttachment,
+          residentKey: _registerResidentKey.isEmpty
+              ? null
+              : _registerResidentKey,
         ),
         timeout: _registerTimeoutMs,
         attestation: _registerAttestation.isEmpty ? null : _registerAttestation,
@@ -198,25 +205,27 @@ class _MyAppState extends State<MyApp> {
       final result = await _webAuthnWebPlugin.register(options);
       print('Registration result: $result');
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Registration successful')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Registration successful')));
     } catch (e) {
       print('Registration error: $e');
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registration failed: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Registration failed: $e')));
     }
   }
 
   Future<void> _showSignDialog(BuildContext context) async {
     final challengeController = TextEditingController(text: _signChallenge);
     final rpIdController = TextEditingController(text: _signRpId);
-    final userVerificationController =
-        TextEditingController(text: _signUserVerification);
-    final timeoutController =
-        TextEditingController(text: _signTimeoutMs.toString());
+    final userVerificationController = TextEditingController(
+      text: _signUserVerification,
+    );
+    final timeoutController = TextEditingController(
+      text: _signTimeoutMs.toString(),
+    );
 
     final confirmed = await showDialog<bool>(
       context: context,
@@ -236,8 +245,9 @@ class _MyAppState extends State<MyApp> {
                 ),
                 TextField(
                   controller: userVerificationController,
-                  decoration:
-                      const InputDecoration(labelText: 'User Verification'),
+                  decoration: const InputDecoration(
+                    labelText: 'User Verification',
+                  ),
                 ),
                 TextField(
                   controller: timeoutController,
@@ -275,22 +285,23 @@ class _MyAppState extends State<MyApp> {
         challenge: _signChallenge, // base64url encoded challenge
         timeout: _signTimeoutMs,
         rpId: _signRpId.isEmpty ? null : _signRpId,
-        userVerification:
-            _signUserVerification.isEmpty ? null : _signUserVerification,
+        userVerification: _signUserVerification.isEmpty
+            ? null
+            : _signUserVerification,
       );
 
       final result = await _webAuthnWebPlugin.sign(options);
       print('Sign result: $result');
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sign successful')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Sign successful')));
     } catch (e) {
       print('Sign error: $e');
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Sign failed: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Sign failed: $e')));
     }
   }
 }

@@ -1,3 +1,7 @@
+## 0.0.5
+
+* lazy-injection for js file
+
 ## 0.0.4
 
 * Add missing exception file

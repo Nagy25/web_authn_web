@@ -27,7 +27,7 @@ Add this package to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  web_authn_web: ^0.0.1
+  web_authn_web: ^0.0.4
 ```
 
 Or run:
@@ -38,7 +38,8 @@ flutter pub add web_authn_web
 
 ## Usage
 
-This package automatically injects the required JavaScript code (`web_authen.js`) into your application.
+This package injects the required JavaScript code (`web_authen.js`) lazily on the
+first WebAuthn call (`register`, `sign`, or `deleteAuth`), not at app startup.
 
 ### Requirements
 
@@ -58,6 +59,8 @@ This package automatically injects the required JavaScript code (`web_authen.js`
 import 'package:web_authn_web/web_authn_web.dart';
 
 final webAuthn = WebAuthnWeb();
+
+// The package loads its JS bridge lazily on the first call below.
 
 final options = PublicKeyCredentialCreationOptions(
   rp: RpEntity(name: 'ACME Corp', id: 'example.com'),
@@ -130,3 +133,4 @@ try {
 
 - This package only performs the browser-side WebAuthn calls. Always validate the returned data on your server.
 - Passkey APIs are not available in all browsers or in insecure contexts.
+- On Flutter Web, the JS bridge asset is injected on demand the first time you call the API.
